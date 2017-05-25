@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeWork_1_Library.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWork_1_Library.Controllers
@@ -13,18 +14,33 @@ namespace HomeWork_1_Library.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult AddBook()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Add a Book";
 
             return View();
         }
 
-        public IActionResult Contact()
+        [HttpPost]
+        public ViewResult AddBook(BooksModel NewBook)
         {
-            ViewData["Message"] = "Your contact page.";
+            if (ModelState.IsValid)
+            {
+                Repository.AddBooks(NewBook);
+                return View("MyLibrary", Repository.BooksRepo);
+            }
+            else
+            {
+                // there is a validation error
+                return View();
+            }
+        }
 
-            return View();
+        public IActionResult MyLibrary()
+        {
+            ViewData["Message"] = "View Your Library";
+
+            return View(Repository.BooksRepo);
         }
 
         public IActionResult Error()
